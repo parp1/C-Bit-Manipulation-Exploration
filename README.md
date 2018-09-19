@@ -20,7 +20,7 @@ Assuming familiarity with how integers and floats are stored in memory, any repr
 * ^ — bitwise 'xor' — acts as a "toggle"
 * ~ — bitwise 'not' — acts as a "flip"
 * << — left shift — acts as a "multiply by power of 2^n"
-* >> — right shift — acts as a "divide by power of 2^n"
+* \>\> — right shift — acts as a "divide by power of 2^n"
 
 Note the differences between these bitwise operations and the logical counterparts, such as logical and, or, and not. Nothing says that bitwise and logical operators can't be used together, too; for example, in these exercises, a logical not (!) is sometimes used for its different behavior.
 
@@ -32,6 +32,8 @@ Finally, with right shifts, we can have arithmetic and logical shifts.
 * Logical — optimal for unsigned numbers, inserts 0 bits instead of copying anything over
 
 In the case of these exercises, the shifts are assumed to be arithmetic. However, this can vary based on the implementation of C.
+
+****
 
 ## Walkthrough
 
@@ -70,6 +72,14 @@ An suitable mask would have `1`'s in all odd positions. To do so without creatin
 The mask is constructed with the constant `0xaa` and repeated left shifts of size `8` and additions of more of the constants. Then, the mask is applied to the input and two logical nots are used.
 
 The logical nots serve the purpose of diminishing the output to either a `0` or `1`. If the mask results in any odd index being flagged, or containing a `1`, the first not will result in a `0` and then the second will result in a negation back to `1`. If the masks results in no odd index being flagged, then the result has to be `0`, which after two logical nots will still be `0`.
+
+### 4. divpwr2
+
+Now, things get a bit trickier. Here, the problem states to compute x / (2 ^ n), rounding towards 0.
+
+This requires checking for two cases, a negative and positive case.
+
+****
 
 ## Testing
 
