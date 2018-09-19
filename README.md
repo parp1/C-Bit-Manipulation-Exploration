@@ -236,6 +236,68 @@ or
 
 This is due to (essentially) "short-circuiting". Air-quotes since technically both sides are evaluated. Both were combined using a bitwise and for the sake of completeness.
 
+### 7. isGreater
+
+```C
+/* 
+ * isGreater - if x > y  then return 1, else return 0 
+ *   Example: isGreater(4,5) = 0, isGreater(5,4) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 24
+ *   Rating: 3
+ */ 
+int isGreater(int x, int y)
+{
+  /* determines the sign of x, y, and 1 less than their difference (to bias for the 0 case) and uses these results to check whether the signs are the different,
+  in which case x has to positive and y negative, or whether the signs are the same and if the difference is positive or negative */
+  int difference = x + ~y;
+  int signx = 1 & (x >> 31);
+  int signy = 1 & (y >> 31);
+  int signd = 1 & (difference >> 31);
+
+  int samesign = !(signx ^ signy) & !signd;
+  int diffsign = (!signx) & signy;
+
+  return samesign | diffsign;
+}
+```
+
+This problem incoporates more of the same logic that was used in the former. There are two cases: the inputs are the same sign, or they are different. If they are the same sign, then the difference, `x - y` has to be positive. If they are different signs, then `x` has to be positive and `y` has to be negative. 
+
+There is a special case to handle, too, where the inputs are equal, so the difference is `0`. Since the problem statement requires `x > y` to be emulated and not `x >= y`.
+
+First, the difference is calculated with a bias for the above case:
+
+```C
+int difference = x + ~y; //x - y = x + (~y + 1), then subtract 1 to bias for 0 case
+```
+
+This bias accounts for this edge-case. (Try it without!)
+
+Next, just like in the former problem, the signs of the inputs and the difference are acquired. Then, two checks are made, one for when the inputs are the same sign, and another for when they are different:
+
+```C
+int samesign = !(signx ^ signy) & !signd;
+```
+
+The bitwise and here masks the result of the xor that checks that the signs are indeed the same, and then makes sure the sign of the difference is positive.
+
+```C
+int diffsign = (!signx) & signy;
+```
+
+This just checks if the two signs are different. There are no other conditions that need to be met in this case. Finally, as one of these cases has to be true, the correct answer is given by:
+
+```C
+return samesign | diffsign;
+```
+
+Notice how the "short-circuiting"-like principle also applies here. To observe the behavior without handling the `0` case described above, replace the difference line with the following:
+
+```C
+int difference = x + (~y + 1);
+```
+
 ****
 
 ## Testing
