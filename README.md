@@ -184,6 +184,58 @@ int ezThreeFourths(int x)
 
 This problem is essentially a degenerated form of the former. It incorporates the same logic for the bias values, although it is a bit more concrete to see here.
 
+### 6. addOK
+
+```C
+/* 
+ * addOK - Determine if can compute x+y without overflow
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 20
+ *   Rating: 3
+ */
+int addOK(int x, int y)
+{
+  int addition = x + y;
+  int signx = 1 & (x >> 31);
+  int signy = 1 & (y >> 31);
+  int signa = 1 & (addition >> 31);
+
+  return (signx ^ signy) | (!(signx ^ signa) & !(signy ^ signa));
+}
+```
+
+This problem is the first of the seriously difficult ones.
+
+The first step is to calculate the sum, simply: 
+
+```C
+int addition = x + y;
+```
+
+Then, get the signs of each of the following: `x`, `y`, and `addition`. To do so, the value is right shifted by `31` and masked by `1`. Thus, if negative, this results in `1`, otherwise `0`.
+
+The solution relies on understanding how overflow works. If the two inputs are of differing signs, there can never be overflow. If they are the same sign, then if the signs of the inputs and resulting addition differ, there was overflow.
+
+```C
+(signx ^ signy) | (!(signx ^ signa) & !(signy ^ signa))
+```
+
+Think of the above statement as two separate parts. The left side of the bitwise or checks if the signs of the inputs differ. The right side checks if the signs of the inputs and the result differ.
+
+Note that the right side could look like the following:
+
+```C
+(signx ^ signy) | !(signx ^ signa)
+```
+
+or
+
+```C
+(signx ^ signy) | !(signy ^ signa)
+```
+
+This is due to (essentially) "short-circuiting". Air-quotes since technically both sides are evaluated. Both were combined using a bitwise and for the sake of completeness.
+
 ****
 
 ## Testing
