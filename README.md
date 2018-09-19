@@ -1,6 +1,8 @@
 # C-Bit-Manipulation-Exploration
 A short exploration of bit manipulation problems in C. Adapted from UCLA CS33 coursework.
 
+****
+
 ## Bit Manipulation basics
 
 ### Representation 
@@ -41,6 +43,20 @@ Each problem has a brief introduction on what it should accomplish, and relevent
 
 ### 1. negate
 
+```C
+/* 
+ * negate - return -x 
+ *   Example: negate(1) = -1.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 5
+ *   Rating: 2
+ */
+int negate(int x)
+{
+  return ~x + 1;
+}
+```
+
 This is the probably the most simple bit manipulation problem there is. The problem statement asks to simply emulate the logical negate operator, `-`. To do so, the bits need to be flipped, and `1` needs to be added.
 
 For example, take the number `42`. Let's assume this is a `short`, so 2 bytes of storage:
@@ -55,6 +71,20 @@ Here's a more in-depth explanation from Cornell: [Why Inversion and Adding One W
 
 ### 2. bitAnd
 
+```C
+/* 
+ * bitAnd - x&y using only ~ and | 
+ *   Example: bitAnd(6, 5) = 4
+ *   Legal ops: ~ |
+ *   Max ops: 8
+ *   Rating: 1
+ */
+int bitAnd(int x, int y)
+{
+  return ~(~x | ~y);
+}
+```
+
 The next problem asks to implement the bitwise and, `&`, using only `~` and `|`.
 
 This can be solved using DeMorgan's law:
@@ -64,6 +94,21 @@ This can be solved using DeMorgan's law:
 Some more information on DeMorgan's can be found [here](https://en.wikipedia.org/wiki/De_Morgan's_laws).
 
 ### 3. anyOddBit
+
+```C
+/* 
+ * anyOddBit - return 1 if any odd-numbered bit in word set to 1
+ *   Examples anyOddBit(0x5) = 0, anyOddBit(0x7) = 1
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 2
+ */
+int anyOddBit(int x)
+{
+  int mask = (((((0xaa << 8) + 0xaa) << 8) + 0xaa) << 8) + 0xaa;
+  return !!(x & mask);
+}
+```
 
 The goal of this harder problem is to return 1 if any odd-numbered bit in the input is set to 1. Clearly, this will require the use of masks.
 
@@ -75,9 +120,49 @@ The logical nots serve the purpose of diminishing the output to either a `0` or 
 
 ### 4. divpwr2
 
+```C
+/* 
+ * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
+ *  Round toward zero
+ *   Examples: divpwr2(15,1) = 7, divpwr2(-33,4) = -2
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 15
+ *   Rating: 2
+ */
+int divpwr2(int x, int n)
+{
+  int bias = ((1 << n) + (~0)) & (x >> 31);
+  return (x + bias) >> n;
+}
+```
+
 Now, things get a bit trickier. Here, the problem states to compute x / (2 ^ n), rounding towards 0.
 
-This requires checking for two cases, a negative and positive case.
+This requires accounting for two cases, a negative and positive case, since the latter naturally rounds towards 0 when dividing, while the former does not.
+
+Examining this discrepancy further, take the following `char` values: `7` and `-7`. Assuming `n = 1`, then the result of this function should be `3` and `-3` respectively.
+
+`0111` right shifted by 1 is `0011`, or `3`. This is correct. Positive values naturally truncate with right shifts.
+
+`1001` right shifted by 1 is `1100`, or `-4`. This is incorrect. Negative values naturally round away from 0 with right shifts.
+
+Thus, some sort of bias value needs to be created:
+
+```C
+int bias = ((1 << n) + (~0)) & (x >> 31);
+```
+
+First, the amount of bias needs to be determined. This is simply whatever the denominator, or `2 ^ n`, minus `1`. This is calculated by left shifting `1` by `n` and then adding a negative `1`, or `+ (~0)`.
+
+The range is one less than the denominator value since the lower bound edge case of each multiple of the denominator would fail, otherwise.
+
+For example, if `n = 1`, then the bias should be `1`, not `2`. If it were the latter, then the function would perform correctly on `-5`, but incorrectly on `-4`. (Try it!)
+
+In the positive case the bias doesn't need to be present, so a final mask by the sign-bit right shifted by `31` (one less than the word size) is required. Hence, if the original `x` is negative, the mask will be all `1`'s and the bias will be kept. If not, the mask will be `0` and nullify the bias.
+
+Finally, a right shift of `n` is applied to `x + bias` to attain the properly rounded value.
+
+Overall, notice how parentheses are used to enforce the order of operations. Without these, the operations would follow precedence, which can get tricky and hard to remember.
 
 ****
 
