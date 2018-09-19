@@ -248,8 +248,6 @@ This is due to (essentially) "short-circuiting". Air-quotes since technically bo
  */ 
 int isGreater(int x, int y)
 {
-  /* determines the sign of x, y, and 1 less than their difference (to bias for the 0 case) and uses these results to check whether the signs are the different,
-  in which case x has to positive and y negative, or whether the signs are the same and if the difference is positive or negative */
   int difference = x + ~y;
   int signx = 1 & (x >> 31);
   int signy = 1 & (y >> 31);
@@ -297,6 +295,41 @@ Notice how the "short-circuiting"-like principle also applies here. To observe t
 ```C
 int difference = x + (~y + 1);
 ```
+
+### 8. replaceByte
+
+```C
+/* 
+ * replaceByte(x,n,c) - Replace byte n in x with c
+ *   Bytes numbered from 0 (LSB) to 3 (MSB)
+ *   Examples: replaceByte(0x12345678,1,0xab) = 0x1234ab78
+ *   You can assume 0 <= n <= 3 and 0 <= c <= 255
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 10
+ *   Rating: 3
+ */
+int replaceByte(int x, int n, int c)
+{
+  /* uses a mask that zeros out the desired byte location in x, then shifts the given byte c to be fill in that zeroed out location after the sum is taken */
+  return (x & ~(0xff << (n << 3))) + (c << (n << 3));
+}
+```
+
+This problem is all about masking. Think about "making room" for the byte that needs to be inserted. The first step is removing the old byte. This can be done by creating a mask that zeros out exactly the desired locations, as follows:
+
+```C
+(x & ~(0xff << (n << 3)))
+```
+
+Here, `0xff` is a constant of all `1`'s that is left shifted by whatever `n` is multiplied by `8`, since `n` is given in terms of how many bytes over to count, not bits. The bitwise not flips the mask so that only the desired location consists of `0`'s and all other locations are `1`'s, and hence, preserved after applying the bitwise and.
+
+The next step is to simply insert the shifted new byte, which is done by:
+
+```C
++ (c << (n << 3))
+```
+
+Here, `c` is shifted to the correct position in the same way the `0xff` constant was in the first step.
 
 ****
 
