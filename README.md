@@ -164,6 +164,26 @@ Finally, a right shift of `n` is applied to `x + bias` to attain the properly ro
 
 Overall, notice how parentheses are used to enforce the order of operations. Without these, the operations would follow precedence, which can get tricky and hard to remember.
 
+### 5. ezThreeFourths
+
+```C
+/*
+ * ezThreeFourths - multiplies by 3/4 rounding toward 0,
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 12
+ *   Rating: 3
+ */
+int ezThreeFourths(int x)
+{
+  int result = x + x + x;
+  int negativeCheck = 3 & (result >> 31);
+  result = (result + negativeCheck) >> 2;
+  return result;
+}
+```
+
+This problem is essentially a degenerated form of the former. It incorporates the same logic for the bias values, although it is a bit more concrete to see here.
+
 ****
 
 ## Testing
