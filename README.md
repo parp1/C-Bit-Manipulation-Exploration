@@ -3,15 +3,15 @@ A short exploration of bit manipulation problems in C. Adapted from UCLA CS33 co
 
 Overview:
 
-[negate](https://github.com/parp1/C-Bit-Manipulation-Exploration#1-negate)
-[bitAnd](https://github.com/parp1/C-Bit-Manipulation-Exploration#2-bitand)
-[anyOddBit](https://github.com/parp1/C-Bit-Manipulation-Exploration#3-anyoddbit)
-[divpwr2](https://github.com/parp1/C-Bit-Manipulation-Exploration#4-divpwr2)
-[ezThreeFourths](https://github.com/parp1/C-Bit-Manipulation-Exploration#5-ezthreefourths)
-[addOK](https://github.com/parp1/C-Bit-Manipulation-Exploration#6-addok)
-[isGreater](https://github.com/parp1/C-Bit-Manipulation-Exploration#7-isgreater)
-[replaceByte](https://github.com/parp1/C-Bit-Manipulation-Exploration#8-replacebyte)
-[tc2sm](https://github.com/parp1/C-Bit-Manipulation-Exploration#9-tc2sm)
+* [negate](https://github.com/parp1/C-Bit-Manipulation-Exploration#1-negate)
+* [bitAnd](https://github.com/parp1/C-Bit-Manipulation-Exploration#2-bitand)
+* [anyOddBit](https://github.com/parp1/C-Bit-Manipulation-Exploration#3-anyoddbit)
+* [divpwr2](https://github.com/parp1/C-Bit-Manipulation-Exploration#4-divpwr2)
+* [ezThreeFourths](https://github.com/parp1/C-Bit-Manipulation-Exploration#5-ezthreefourths)
+* [addOK](https://github.com/parp1/C-Bit-Manipulation-Exploration#6-addok)
+* [isGreater](https://github.com/parp1/C-Bit-Manipulation-Exploration#7-isgreater)
+* [replaceByte](https://github.com/parp1/C-Bit-Manipulation-Exploration#8-replacebyte)
+* [tc2sm](https://github.com/parp1/C-Bit-Manipulation-Exploration#9-tc2sm)
 
 ****
 
