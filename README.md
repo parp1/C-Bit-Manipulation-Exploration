@@ -30,7 +30,7 @@ Some important points to understand before this tutorial:
 Assuming familiarity with how integers and floats are stored in memory, any representation of such values can be modified with the following operators:
 
 * & — bitwise 'and' — acts as a "mask"
-* | — bitwise 'or' — acts as a 
+* | — bitwise 'or' — acts as an "adder"
 * ^ — bitwise 'xor' — acts as a "toggle"
 * ~ — bitwise 'not' — acts as a "flip"
 * << — left shift — acts as a "multiply by power of 2^n"
