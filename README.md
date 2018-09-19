@@ -1,17 +1,17 @@
 # C-Bit-Manipulation-Exploration
 A short exploration of bit manipulation problems in C. Adapted from UCLA CS33 coursework.
 
-Quick walkthrough:
+Overview:
 
-* [negate](https://github.com/parp1/C-Bit-Manipulation-Exploration#1-negate)
-* [bitAnd](https://github.com/parp1/C-Bit-Manipulation-Exploration#2-bitand)
-* [anyOddBit](https://github.com/parp1/C-Bit-Manipulation-Exploration#3-anyoddbit)
-* [divpwr2](https://github.com/parp1/C-Bit-Manipulation-Exploration#4-divpwr2)
-* [ezThreeFourths](https://github.com/parp1/C-Bit-Manipulation-Exploration#5-ezthreefourths)
-* [addOK](https://github.com/parp1/C-Bit-Manipulation-Exploration#6-addok)
-* [isGreater](https://github.com/parp1/C-Bit-Manipulation-Exploration#7-isgreater)
-* [replaceByte](https://github.com/parp1/C-Bit-Manipulation-Exploration#8-replacebyte)
-* [tc2sm](https://github.com/parp1/C-Bit-Manipulation-Exploration#9-tc2sm)
+[negate](https://github.com/parp1/C-Bit-Manipulation-Exploration#1-negate)
+[bitAnd](https://github.com/parp1/C-Bit-Manipulation-Exploration#2-bitand)
+[anyOddBit](https://github.com/parp1/C-Bit-Manipulation-Exploration#3-anyoddbit)
+[divpwr2](https://github.com/parp1/C-Bit-Manipulation-Exploration#4-divpwr2)
+[ezThreeFourths](https://github.com/parp1/C-Bit-Manipulation-Exploration#5-ezthreefourths)
+[addOK](https://github.com/parp1/C-Bit-Manipulation-Exploration#6-addok)
+[isGreater](https://github.com/parp1/C-Bit-Manipulation-Exploration#7-isgreater)
+[replaceByte](https://github.com/parp1/C-Bit-Manipulation-Exploration#8-replacebyte)
+[tc2sm](https://github.com/parp1/C-Bit-Manipulation-Exploration#9-tc2sm)
 
 ****
 
@@ -344,6 +344,56 @@ The next step is to simply insert the shifted new byte, which is done by:
 Here, `c` is shifted to the correct position in the same way the `0xff` constant was in the first step.
 
 ### 9. tc2sm
+
+```C
+/* 
+ * tc2sm - Convert from two's complement to sign-magnitude 
+ *   where the MSB is the sign bit
+ *   You can assume that x > TMin
+ *   Example: tc2sm(-5) = 0x80000005.
+ *   Legal ops: ! ~ & ^ | + << >>
+ *   Max ops: 15
+ *   Rating: 4
+ */
+int tc2sm(int x) 
+{
+  /* uses a mask that starts with 1 and then is all zeros along with a 'boolean' sign value to either calculate the abs value of all lower bits (all except MSB) when 
+  x is negative, or just return x if it is positive */
+  int mask = 1 << 31;
+  int sign = x >> 31;
+
+  return ((~(x&~mask)+1)&sign) + (x&~sign);
+}
+```
+
+Definitely the hardest one, by far.
+
+The first step is to understand the [difference](https://en.wikipedia.org/wiki/Signed_number_representations#Signed_magnitude_representation) between two's complement and sign-magnitude. Interestingly, there are two ways to represent `0` in sign-magnitude.
+
+To really understand how this works, the best thing to do is try some examples on paper, using 1 or 2-byte values. It is essentially just an algorithmic process, similar to how `negate` works, so trial and error eventually reveals the answer.
+
+The first step in terms of code is to isolate the sign bit and a mask for the lower bits, as follows:
+
+```C
+int mask = 1 << 31;
+int sign = x >> 31;
+```
+
+Then, the lower bits have to be negated:
+
+```C
+(~(x&~mask)+1)
+```
+
+Next, this result has to be masked with sign. Hence, if the number is positive, the result is `0`, and if it is negative, the result is the same as before (a mask of all `1`'s does nothing).
+
+Finally, if `x` is positive, then the sign-magnitude representation is the same. If it is negative, then we have the sign-magnitude representation already.
+
+```C
++ (x&~sign)
+```
+
+Adding this at the end ensures that either `x` is retrieved (in the former case), or `0` is added (in the latter case).
 
 ****
 
