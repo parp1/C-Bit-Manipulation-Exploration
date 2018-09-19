@@ -7,8 +7,8 @@ LIBS = -lm
 
 all: btest
 
-btest: btest.c bits.c decl.c tests.c btest.h bits.h
-	$(CC) $(CFLAGS) $(LIBS) -o btest bits.c btest.c decl.c tests.c
+btest: btest.c src/*.c decl.c tests.c btest.h bits.h
+	$(CC) $(CFLAGS) $(LIBS) -o btest src/*.c btest.c decl.c tests.c
 
 clean:
 	rm -f *.o btest *~
