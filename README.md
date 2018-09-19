@@ -49,11 +49,17 @@ After performing the operation, which highlights the nature of two's complement 
 
 `11111111 11010110`
 
-Here's a more in-depth explanation from Cornell: [Why Inversion and Adding One Works](https://www.cs.cornell.edu/~tomf/notes/cps104/twoscomp.html#whyworks)
+Here's a more in-depth explanation from Cornell: [Why Inversion and Adding One Works](https://www.cs.cornell.edu/~tomf/notes/cps104/twoscomp.html#whyworks).
 
 ### 2. bitAnd
 
 The next problem asks to implement the bitwise and, `&`, using only `~` and `|`.
+
+This can be solved using DeMorgan's law:
+
+`x & y` = `~(~ (x & y))` = `~(~x | ~y)`
+
+Some more information on DeMorgan's can be found [here](https://en.wikipedia.org/wiki/De_Morgan's_laws).
 
 ## Testing
 
